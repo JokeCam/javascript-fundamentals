@@ -1,2 +1,2 @@
-# javascript-fundamentals
-javascript-fundamentals study tasks
+# javascript-tasks
+javascript study tasks
