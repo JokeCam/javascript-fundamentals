@@ -1,111 +1,97 @@
 function isArray(obj) {
-    if (obj instanceof Array) {
-        return true
-    } else return false
-}
-
-function isBoolean(obj) {
-    if (typeof obj === 'boolean') {
-        return true
-    } else return false
+    return obj instanceof Array
 }
 
 function isDate(obj) {
-    if (obj instanceof Date) {
-        return true
-    } else return false
+    return obj instanceof Date
+}
+
+function isBoolean(obj) {
+    return typeof obj === 'boolean'
 }
 
 function isNumber(obj) {
-    if (typeof obj === 'number') {
-        return true
-    } else return false
+    return typeof obj === 'number'
 }
 
 function isString(obj) {
-    if (typeof obj === 'string') {
-        return true
-    } else return false
+    return typeof obj === 'string'
 }
 
 function isFunction(obj) {
-    if (typeof obj === 'function') {
-        return true
-    } else return false
+    return typeof obj === 'function'
 }
 
 function isUndefined(obj) {
-    if (typeof obj === 'undefined') {
-        return true
-    } else return false
+    return typeof obj === 'undefined'
 }
 
 function isNull(obj) {
-    if (obj === null) {
-        return true
-    } else return false
+    return obj === null
 }
 
 // Working with arrays:
 
-const testArr = [{ 1: 1 }, 2, 3, 4, 5, { 6: 6 }]
-
 function first(arr) {
-    if (isArray(arr)) {
-        return arr[0]
-    } else return `${arr} Is not an array`
+    if (!isArray(arr)) {
+        return null
+    }
+
+    return arr[0]
 }
 
 function last(arr) {
-    if (isArray(arr)) {
-        return arr[arr.length - 1]
-    } else return `${arr} Is not an array`
-}
+    if (!isArray(arr)) {
+        return null
+    }
 
-function skip(arr, number) {
-    if (isArray(arr)) {
-        if (isNumber(number)) {
-            let newArr = []
-            for (let i = 0; i < arr.length; i++) {
-                if (i < number) {
-                    newArr.push(arr[i])
-                }
-            }
-            return newArr
-        } else return `${number} Is not a number`
-    } else return `${arr} Is not an array`
+    return arr[arr.length - 1]
 }
 
 function take(arr, number) {
-    if (isArray(arr)) {
-        if (isNumber(number)) {
-            let newArr = []
-            for (let i = 0; i < arr.length; i++) {
-                if (i >= number) {
-                    newArr.push(arr[i])
-                }
-            }
-            return newArr
-        } else return `${number} Is not a number`
-    } else return `${arr} Is not an array`
+    if (!isArray(arr)) {
+        return null
+    }
+
+    if (!isNumber(number)) {
+        return `${number} Is not a number`
+    }
+
+    const newArr = []
+    for (let i = 0; i < number; i++) {
+        newArr.push(arr[i])
+    }
+
+    return newArr
+}
+
+function skip(arr, number) {
+    if (!isArray(arr)) {
+        return null
+    }
+
+    if (!isNumber(number)) {
+        return `${number} Is not a number`
+    }
+
+    const newArr = []
+    for (let i = number; i < arr.length; i++) {
+        newArr.push(arr[i])
+    }
+
+    return newArr
 }
 
 function asChain(arr) {
-    let newArr = []
+    class ChainArray extends Array {
+        skip(n) {
+            return asChain(skip(arr, n))
+        }
 
-    let obj = {
-        skip: function(num) {
-            newArr = skip(arr, num)
-            return this
-        },
-        take: function(num) {
-            newArr = take(arr, num)
-            return this
+        take(n) {
+            return asChain(take(arr, n))
         }
     }
-    return obj
+
+    return new ChainArray(...arr)
 }
-
-// ???
-
-console.log(asChain(testArr).skip(4).take(2))
