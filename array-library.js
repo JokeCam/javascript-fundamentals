@@ -1,121 +1,137 @@
-let testArr = [1, 2, 3, 4, 5, 6]
-
 function isArray(obj) {
-    if (obj instanceof Array) {
-        return true
-    } else return false
-}
+    return obj instanceof Array;
+};
 
 function isNumber(obj) {
-    if (typeof obj === 'number') {
-        return true
-    } else return false
-}
+    return typeof obj === 'number';
+};
 
 function isFunction(obj) {
-    if (typeof obj === 'function') {
-        return true
-    } else return false
-}
+    return typeof obj === 'function';
+};
 
-function skip(array, number) {
-    if (isArray(array)) {
-        if (isNumber(number)) {
-            let newArr = []
-            for (let i = 0; i < array.length; i++) {
-                if (i >= number) {
-                    newArr.push(array[i])
-                }
-            }
-            return newArr
-        } else return `${number} Is not a number`
-    } else return `${array} Is not an array`
-}
+function take(arr, number) {
+    if (!isArray(arr)) {
+        return null;
+    };
 
-function take(array, number) {
-    if (isArray(array)) {
-        if (isNumber(number)) {
-            let newArr = []
-            for (let i = 0; i < array.length; i++) {
-                if (i < number) {
-                    newArr.push(array[i])
-                }
-            }
-            return newArr
-        } else return `${number} Is not a number`
-    } else return `${array} Is not an array`
-}
+    if (!isNumber(number)) {
+        return `${number} Is not a number`;
+    };
+
+    const newArr = [];
+    for (let i = 0; i < number; i++) {
+        newArr.push(arr[i]);
+    };
+
+    return newArr;
+};
+
+function skip(arr, number) {
+    if (!isArray(arr)) {
+        return null;
+    };
+
+    if (!isNumber(number)) {
+        return `${number} Is not a number`;
+    };
+
+    const newArr = [];
+    for (let i = number; i < arr.length; i++) {
+        newArr.push(arr[i]);
+    };
+
+    return newArr;
+};
 
 function map(array, callback) {
-    if (isArray(array)) {
-        if (isFunction(callback)) {
-            let newArr = []
-            let index
-            for (index = 0; index < array.length; index++) {
-                newArr.push(callback(array[index], index))
-            }
-            return newArr
-        } else return `${callback} Is not a function`
-    } else return `${array} Is not an array`
+    if (!isArray(array)) {
+        return null;
+    };
+
+    if (!isFunction(callback)) {
+        return `${callback} Is not a function`;
+    };
+
+    const newArr = [];
+    for (let index = 0; index < array.length; index++) {
+        const currentItem = array[index];
+        newArr.push(callback(currentItem, index));
+    };
+
+    return newArr;
 }
 
 function reduce(array, callback, initialValue) {
-    if (isArray(array)) {
-        if (isFunction(callback)) {
-            let accumulator = initialValue ?? 0
-            let index
-            for (index = 0; index < array.length; index++) {
-                accumulator = callback(accumulator, currentValue = array[index], index, array)
-            }
-            return accumulator
-        } else return `${callback} Is not a function`
-    } else return `${array} Is not an array`
-}
+    if (!isArray(array)) {
+        return null;
+    };
+
+    if (!isFunction(callback)) {
+        return `${callback} Is not a function`;
+    };
+
+    let accumulator = initialValue ?? 0;
+    for (let index = 0; index < array.length; index++) {
+        const currentValue = array[index];
+        accumulator = callback(accumulator, currentValue, index, array);
+    };
+
+    return accumulator;
+};
 
 function foreach(array, callback) {
     if (isArray(array)) {
-        if (isFunction(callback)) {
-            let index
-            for (index = 0; index < array.length; index++) {
-                callback(array[index], index)
-            }
-        } else return `${callback} Is not a function`
-    } else return `${array} Is not an array`
-}
+        return null;
+    };
+
+    if (!isFunction(callback)) {
+        return `${callback} Is not a function`;
+    };
+
+    for (let index = 0; index < array.length; index++) {
+        const currentItem = array[index];
+        callback(currentItem, index);
+    };
+};
 
 function filter(array, callback) {
-    if (isArray(array)) {
-        if (isFunction(callback)) {
-            let index
-            let newArr = []
-            for (index = 0; index < array.length; index++) {
-                if (callback(array[index], index, array)) {
-                    newArr.push(array[index])
-                }
-            }
-            return newArr
-        } else return `${callback} Is not a function`
-    } else return `${array} Is not an array`
-}
+    if (!isArray(array)) {
+        return null;
+    };
+
+    if (!isFunction(callback)) {
+        return `${callback} Is not a function`;
+    };
+
+    const newArr = [];
+    for (let index = 0; index < array.length; index++) {
+        const currentItem = array[index];
+        if (callback(currentItem, index, array)) {
+            newArr.push(array[index]);
+        };
+    };
+
+    return newArr;
+};
 
 const arrayLib = {
     arr: [],
     value() {
-        return this.arr
+        return this.arr;
     },
-    chain: function(arr) {
-        this.arr = arr
-        return this
+    chain: function (arr) {
+        this.arr = arr;
+        return this;
     },
-    take: function(num) {
-        this.arr = take(this.arr, num)
-        return this
+    take: function (num) {
+        this.arr = take(this.arr, num);
+        return this;
     },
-    skip: function(num) {
-        this.arr = skip(this.arr, num)
-        
-        return this
+    skip: function (num) {
+        this.arr = skip(this.arr, num);
+        return this;
     }
-}
+};
 
-console.log(arrayLib.chain([1, 2, 3]).take(2).skip(1).value())
+console.log(arrayLib.chain([1, 2, 3]).take(2).skip(1).value());
